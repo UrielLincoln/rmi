@@ -6,6 +6,6 @@ import java.util.ArrayList;
 
 public interface IClienteSQL extends Remote {
     ArrayList<Membro> mensagem() throws RemoteException;
-    void inserir() throws RemoteException;
-    Membro verificarLider(Long id);
+    Membro verificarLider( );
+	void inserir(int i) throws RemoteException;
 }

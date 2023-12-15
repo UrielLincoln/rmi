@@ -11,18 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 //import lombok.Data;
 
-@Entity(name = "membros")
+
 public class Membro{
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	boolean lider = false;
+	private int id;
 	private int posicao;
 	
+	public Membro(int i) {
+		this.id = id;
+	}
 
-	public Long getID() {
+	public int getID() {
 		return this.id;
 	}
 
@@ -30,4 +30,17 @@ public class Membro{
 		return this.posicao;
 	}
 	
+	public void  setPosicao(int posicao) {
+		this.posicao = posicao;
+	}
+	
+	public boolean eLider() {
+		if(lider == true) {
+			return true;
+		}
+		else 
+			return false;
+	}
+	
 }
+

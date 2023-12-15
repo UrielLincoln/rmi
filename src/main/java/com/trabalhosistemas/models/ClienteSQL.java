@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.sql.JDBCType;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,13 +18,18 @@ public class ClienteSQL implements IClienteSQL {
     @Autowired
     private JpaRepository membroRepository;
 
+    public List<Membro> membros = new ArrayList<Membro>();
+    
+    
 	@Override
-	public void inserir() throws RemoteException {
-		// TODO Auto-generated method stub
-		Membro membro = new Membro();
-		membroRepository.save(membro);
+	public void inserir(int quantidade) throws RemoteException {
+		for(int i=0; i<quantidade;i++) {
+			Membro membro = new Membro(i);
+			membro.setPosicao(i);
+			membros.add(membro);
+		}
+		
 	}
-
 
     @Override
     public ArrayList<Membro> mensagem() {
@@ -31,11 +37,36 @@ public class ClienteSQL implements IClienteSQL {
     }
 
 
+    //Implementar alguma forma de achar o lider
 	@Override
-	public Membro verificarLider(Long id){
-		Optional<Membro> optionalMembro = membroRepository.findById(id);
-        return optionalMembro.orElse(null);
+	public Membro verificarLider(){
+		Membro membroeleito = null;
+		for(Membro membro : membros) {
+			if(membro.eLider()) 
+				membroeleito = membro;
+		}
+		
+		return membroeleito;
+		
 	}
+
+	
+	
+	public void realizarEleicao() {
+        System.out.println("Iniciando eleição...");
+            if (verificarLider()==null) {
+			    iniciarEleicao();
+			}
+            
+    }
+
+	
+	//Implementar um metodo para eleger um lider
+	private void iniciarEleicao() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

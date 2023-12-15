@@ -7,13 +7,22 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class ReplicationServer extends UnicastRemoteObject implements ReplicationInterface {
     private boolean liderAtivo = true;
+    private List<Membro> membros;
+    private int id;
+    
+    ClienteSQL cliente = new ClienteSQL();
+    
 
     protected ReplicationServer() throws RemoteException {
         super();
+        this.membros = new ArrayList<Membro>();
     }
 
     public String sayHello() throws RemoteException {
@@ -25,7 +34,7 @@ public class ReplicationServer extends UnicastRemoteObject implements Replicatio
     public void sendDataToReplicas(String data, int senderId) throws RemoteException {
         if (!liderAtivo) {
             System.out.println("O líder está inativo. Iniciando eleição...");
-            realizarEleicao();
+            this.cliente.realizarEleicao();
             return;
         }
 
@@ -33,19 +42,17 @@ public class ReplicationServer extends UnicastRemoteObject implements Replicatio
         // Lógica de replicação aqui
     }
 
-    private void realizarEleicao() {
-        // Lógica para iniciar uma eleição e eleger um novo líder
-        // Você pode usar um algoritmo de eleição, como o algoritmo de Bully ou outro de sua escolha
-        // Após a eleição, atualize o líder ativo
-        liderAtivo = true;
-        System.out.println("Nova eleição concluída. Novo líder ativo.");
-    }
+    
 
     public void sinalizarLiderInativo() {
         liderAtivo = false;
     }
 
+    
+    //Main para executar o codigo
     public static void main(String[] args) {
+    	
+    	
         try {
             startServer();
         } catch (Exception e) {
@@ -70,9 +77,5 @@ public class ReplicationServer extends UnicastRemoteObject implements Replicatio
 		
 	}
 
-	@Override
-	public boolean verificarLider(int i) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 }
